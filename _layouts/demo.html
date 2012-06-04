@@ -10,18 +10,13 @@
 				var button = document.getElementById('instaedit-edit');
 
 				button.onclick = function () {
-					instaedit('https://raw.github.com/binaryage/instaedit/master/demo/js/parser-example.js')
+					loadScripts('https://raw.github.com/binaryage/instaedit/master/demo/js/parser-example.js');
 				}
 			}
 
-			function instaedit(parserScript) {
-				if(!instaeditLoaded) {
-					addJavascript('https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js');
-					addJavascript(parserScript);
-					instaeditLoaded = true;
-				} else {
-					console.log('Instaedit already loaded!');
-				}
+			function loadScripts(parserScript) {
+				addJavascript('https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js');
+				addJavascript(parserScript);
 			}
 
 			function addJavascript(name) {
@@ -41,7 +36,6 @@
 		</script>
 
 		<!-- <meta raw-data-source="https://raw.github.com/binaryage/blog/gh-pages/_posts/2012-04-07-hello-san-francisco.md"> -->
-
 	</head>
 	<body>
 		<h1>{{ page.title }}</h1>
