@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Instaedit Script generator
+title: Instaedit code generator
 ---
 
 <script>
@@ -30,6 +30,14 @@ title: Instaedit Script generator
 		return code;
 	}
 
+	function copyToClipboard(text) {
+  		var input = document.getElementById('code');
+  		
+  		input.select();
+
+  		document.execCommand('Copy');
+	}
+
 	window.onload = function () {
 		code.innerHTML = composeCode('./js/parser-example.js', '../src/instaedit-worker.js');
 		hideScriptFields();
@@ -38,6 +46,7 @@ title: Instaedit Script generator
 		var githubRadio = document.getElementById('github');
 		var defaultRadio = document.getElementById('default');
 		var minifyButton = document.getElementById('minify');
+		var clipboardButton = document.getElementById('clipboard');
 
 		ownRadio.onclick = function () {
 			code.innerHTML = composeCode('path/to/parser.js', 'path/to/worker.js');
@@ -62,6 +71,11 @@ title: Instaedit Script generator
 			var code = document.getElementById('code');
 			code.innerHTML = minify(code.innerHTML);
 		}
+
+		clipboardButton.onclick = function () {
+			var code = document.getElementById('code').innerHTML;
+			alert(code);
+		}
 	}
 
 	addEventListener('keydown', function () {
@@ -74,25 +88,58 @@ title: Instaedit Script generator
 </script>
 
 <style>
+	body {
+		background: url(http://subtlepatterns.com/patterns/purty_wood.png);
+	}
+
+	#bg-shield-1 {
+		width: 35%;
+
+		width: fixed;
+		height: 220px;
+
+		position: absolute;
+		left: 10%;
+		top: 190px;
+		opacity: 0.2;
+	}
+
+	#bg-shield-2 {
+		width: 45%;
+
+		width: fixed;
+		height: 420px;
+
+		position: absolute;
+		left: 45%;
+		top: 110px;
+		opacity: 0.5;
+	}
+
+	.bg-shield {
+		background-color: black;
+		
+		box-shadow: -1px -1px 10px grey;
+
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+
+		border-color: #e5e5e5;
+	}
+
 	#form {
 		width: 45%;
-		float: left;
-		margin-top: 67px;
-		margin-left: 20px;
-		background-color: silver;
+
+		position: absolute;
+		left: 10%;
+		top: 190px;
+
 		padding: 20px 20px 20px 20px;
 		font-family: "Helvetica";
-
-		border-top-left-radius: 10px;
-		border-bottom-left-radius: 10px;
 	}
 
 	#code {
-		width: 45%;
-		float: right;
-		margin-top: 50px;
-		margin-left: 20px;
-		background-color: silver;
+		width: 40%;
 		padding: 5px 25px 20px 15px;
 		
 		word-wrap: break-word;
@@ -100,6 +147,12 @@ title: Instaedit Script generator
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
+
+		position: absolute;
+		left: 45%;
+		top: 100px;
+
+		color: white;
 	}
 
 	input[type=text] {
@@ -110,14 +163,38 @@ title: Instaedit Script generator
 	}
 
 	#minify {
-		background-color: grey;
+
+	}
+
+	.button {
+		background-image: -webkit-linear-gradient(top, #08C, #05C);
+		position: relative;
+		
+		padding: 5px 5px 5px 5px;
 		border-radius: 5px;
-		border: 1px solid black;
-		width: 80px;
+		cursor: pointer;
+		
+		font-family: "Arial";
+		font-size: 15px;
+		border-color: #CCC;
+
+		color: #fff;
+
 		text-align: center;
-		font-size: 12px;
+
+		padding: 5px 20px 5px 20px;
+		margin-right: 5px;
+	}
+
+	h1 {
+		font-family: "HelveticaNeue";
+		opacity: 0.5;
+		text-shadow: -1px -1px 2px grey;
+		text-align: center;
 	}
 </style>
+
+<div class="bg-shield" id="bg-shield-1"></div>
 
 <div id="form">
 	<form name="generator">
@@ -128,21 +205,21 @@ title: Instaedit Script generator
 		</table>
 
 		<table id="scripts">
-			<tr> <td> Parser </td> <td> <input type="text" name="parser"> </td> </tr>
-			<tr> <td> Worker </td> <td> <input type="text" name="worker"> </td> </tr>
+			<tr> <td> Parser </td> <td> <input type="text" name="parser" value="./js/parser-example.js"> </td> </tr>
+			<tr> <td> Worker </td> <td> <input type="text" name="worker" value="../src/instaedit-worker.js"> </td> </tr>
 		</table>
 
 		<br>
-		<div id="minify">Minify</div>
+		<span class="button" id="minify">Minify</span>
+		<span class="button" id="clipboard">Copy to clipboard</span>
 	</form>
 </div>
 
-<pre id="code">
+<div class="bg-shield" id="bg-shield-2"></div>
 
-</pre>
+<pre id="code"></pre>
 
-<div id="code-source">
-var instaeditLoaded = false;
+<div id="code-source">var instaeditLoaded = false;
 
 window.onload = function () {
 	var button = document.getElementById('instaedit-edit');
@@ -168,3 +245,5 @@ function addJavascript(name) {
 	th.appendChild(s);
 }";
 </div>
+
+<input type="text" id="helper" style="visibility: hidden;">
