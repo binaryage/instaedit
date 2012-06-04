@@ -1,0 +1,170 @@
+---
+layout: default
+title: Instaedit Script generator
+---
+
+<script>
+	function minify(code) {
+		return code.replace(/(\r\n|\n|\r|\t)/gm, "");code;
+	}
+
+	function hideScriptFields() {
+		var tbl = document.getElementById('scripts');
+		tbl.style.visibility = 'hidden';
+	}
+
+	function showScriptFields() {
+		var tbl = document.getElementById('scripts');
+		tbl.style.visibility = 'visible';
+	}
+
+	function composeCode(workerLocation, parserLocation) {
+		var code = document.getElementById('code-source');
+		
+		code.style.visibility = 'hidden';
+
+		code = code.innerHTML;
+		code = code.replace('~worker~', workerLocation);
+		code = code.replace('~parser~', parserLocation);
+
+		return code;
+	}
+
+	window.onload = function () {
+		code.innerHTML = composeCode('./js/parser-example.js', '../src/instaedit-worker.js');
+		hideScriptFields();
+
+		var ownRadio = document.getElementById('own');
+		var githubRadio = document.getElementById('github');
+		var defaultRadio = document.getElementById('default');
+		var minifyButton = document.getElementById('minify');
+
+		ownRadio.onclick = function () {
+			code.innerHTML = composeCode('path/to/parser.js', 'path/to/worker.js');
+			showScriptFields();
+		}
+
+		defaultRadio.onclick = function () {
+			hideScriptFields();
+
+			var code = document.getElementById('code');
+			code.innerHTML = composeCode('./js/parser-example.js', '../src/instaedit-worker.js');
+		}
+
+		githubRadio.onclick = function () {
+			hideScriptFields();
+
+			var code = document.getElementById('code');
+			code.innerHTML = composeCode('https://raw.github.com/binaryage/instaedit/master/demo/js/parser-example.js', 'https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js');
+		}
+
+		minifyButton.onclick = function () {
+			var code = document.getElementById('code');
+			code.innerHTML = minify(code.innerHTML);
+		}
+	}
+
+	addEventListener('keydown', function () {
+		var code = document.getElementById('code');
+		code.innerHTML = composeCode(document.generator.worker.value, document.generator.parser.value);
+
+		console.log(document.generator.worker.value);
+		console.log(document.generator.parser.value);
+	});
+</script>
+
+<style>
+	#form {
+		width: 45%;
+		float: left;
+		margin-top: 67px;
+		margin-left: 20px;
+		background-color: silver;
+		padding: 20px 20px 20px 20px;
+		font-family: "Helvetica";
+
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+
+	#code {
+		width: 45%;
+		float: right;
+		margin-top: 50px;
+		margin-left: 20px;
+		background-color: silver;
+		padding: 5px 25px 20px 15px;
+		
+		word-wrap: break-word;
+
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+
+	input[type=text] {
+		width: 250px;
+		height: 25px;
+		border-radius: 5px;
+		border: 1px solid grey;
+	}
+
+	#minify {
+		background-color: grey;
+		border-radius: 5px;
+		border: 1px solid black;
+		width: 80px;
+		text-align: center;
+		font-size: 12px;
+	}
+</style>
+
+<div id="form">
+	<form name="generator">
+		<table>
+			<tr> <td> <input type="radio" name="source-type" value="github" id="github"/> </td><td> Instaedit Github </td> <tr>
+			<tr> <td> <input type="radio" name="source-type" value="default" id="default" checked="checked" /> </td><td> Instaedit default </td> <tr>
+			<tr> <td> <input type="radio" name="source-type" value="own" id="own"/> </td><td> Your own </td> <tr>
+		</table>
+
+		<table id="scripts">
+			<tr> <td> Parser </td> <td> <input type="text" name="parser"> </td> </tr>
+			<tr> <td> Worker </td> <td> <input type="text" name="worker"> </td> </tr>
+		</table>
+
+		<br>
+		<div id="minify">Minify</div>
+	</form>
+</div>
+
+<pre id="code">
+
+</pre>
+
+<div id="code-source">
+var instaeditLoaded = false;
+
+window.onload = function () {
+	var button = document.getElementById('instaedit-edit');
+
+	button.onclick = function () {
+		loadScripts(~parser~);
+	}
+}
+
+function loadScripts(parserScript) {
+	addJavascript(~worker~);
+	addJavascript(parserScript);
+}
+
+function addJavascript(name) {
+	var th = document.getElementsByTagName('head')[0];
+	var s = document.createElement('script');
+	s.setAttribute('type', 'text/javascript');
+
+	var id = new Date().getTime();
+	s.setAttribute('src', name + '?id' + id);
+
+	th.appendChild(s);
+}";
+</div>
