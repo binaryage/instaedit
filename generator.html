@@ -225,12 +225,12 @@ window.onload = function () {
 	var button = document.getElementById('instaedit-edit');
 
 	button.onclick = function () {
-		loadScripts(~parser~);
+		loadScripts('~parser~');
 	}
 }
 
 function loadScripts(parserScript) {
-	addJavascript(~worker~);
+	addJavascript('~worker~');
 	addJavascript(parserScript);
 }
 
