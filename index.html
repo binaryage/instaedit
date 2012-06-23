@@ -8,10 +8,10 @@
 				document.getElementById('instaedit-edit').onclick = function () {
 					(function () {
 						var th = document.getElementsByTagName('head')[0];
-
+	
 						var s = document.createElement('script');
 						s.setAttribute('type', 'text/javascript');
-						s.setAttribute('src', '../src/instaedit-worker.js');
+						s.setAttribute('src', 'https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js');
 
 						th.appendChild(s);
 					})();
@@ -19,10 +19,10 @@
 			}
 		</script>
 
-		<meta name="instaeditparser" content="./js/parser-example.js">
+		<meta name="instaeditparser" content="./src/parser-example.js">
 		<meta name="instaeditsource" content="https://raw.github.com/binaryage/blog/gh-pages/_posts/2012-04-07-hello-san-francisco.md">
 
-		<script type="text/javascript" src="./js/Markdown.Converter.js"></script>
+		<script type="text/javascript" src="https://raw.github.com/binaryage/instaedit/master/demo/js/Markdown.Converter.js"></script>
 	</head>
 	<body>
 		<h1> Instaedit demo </h1>
