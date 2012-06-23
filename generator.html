@@ -3,116 +3,33 @@ layout: default
 title: Instaedit code generator
 ---
 
-<script>
-	function minify(code) {
-		return code.replace(/(\r\n|\n|\r|\t)/gm, "");code;
-	}
-
-	function hideScriptFields() {
-		var tbl = document.getElementById('scripts');
-		tbl.style.visibility = 'hidden';
-	}
-
-	function showScriptFields() {
-		var tbl = document.getElementById('scripts');
-		tbl.style.visibility = 'visible';
-	}
-
-	function composeCode(workerLocation, parserLocation) {
-		var code = document.getElementById('code-source');
-		
-		code.style.visibility = 'hidden';
-
-		code = code.innerHTML;
-		code = code.replace('~worker~', workerLocation);
-		code = code.replace('~parser~', parserLocation);
-
-		return code;
-	}
-
-	function copyToClipboard(text) {
-  		var input = document.getElementById('code');
-  		
-  		input.select();
-
-  		document.execCommand('Copy');
-	}
-
-	window.onload = function () {
-		code.innerHTML = composeCode('./js/parser-example.js', '../src/instaedit-worker.js');
-		hideScriptFields();
-
-		var ownRadio = document.getElementById('own');
-		var githubRadio = document.getElementById('github');
-		var defaultRadio = document.getElementById('default');
-		var minifyButton = document.getElementById('minify');
-		var clipboardButton = document.getElementById('clipboard');
-
-		ownRadio.onclick = function () {
-			code.innerHTML = composeCode('path/to/parser.js', 'path/to/worker.js');
-			showScriptFields();
-		}
-
-		defaultRadio.onclick = function () {
-			hideScriptFields();
-
-			var code = document.getElementById('code');
-			code.innerHTML = composeCode('./js/parser-example.js', '../src/instaedit-worker.js');
-		}
-
-		githubRadio.onclick = function () {
-			hideScriptFields();
-
-			var code = document.getElementById('code');
-			code.innerHTML = composeCode('https://raw.github.com/binaryage/instaedit/master/demo/js/parser-example.js', 'https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js');
-		}
-
-		minifyButton.onclick = function () {
-			var code = document.getElementById('code');
-			code.innerHTML = minify(code.innerHTML);
-		}
-
-		clipboardButton.onclick = function () {
-			var code = document.getElementById('code').innerHTML;
-			alert(code);
-		}
-	}
-
-	addEventListener('keydown', function () {
-		var code = document.getElementById('code');
-		code.innerHTML = composeCode(document.generator.worker.value, document.generator.parser.value);
-
-		console.log(document.generator.worker.value);
-		console.log(document.generator.parser.value);
-	});
-</script>
-
 <style>
 	body {
 		background: url(http://subtlepatterns.com/patterns/purty_wood.png);
+		overflow-x: hidden;
 	}
 
 	#bg-shield-1 {
-		width: 35%;
+		width: 90%;
 
 		width: fixed;
-		height: 220px;
+		height: 240px;
 
 		position: absolute;
-		left: 10%;
-		top: 190px;
+		left: 5%;
+		top: 40px;
 		opacity: 0.2;
 	}
 
 	#bg-shield-2 {
-		width: 45%;
+		width: 90%;
 
 		width: fixed;
-		height: 420px;
+		bottom: 0px;
 
 		position: absolute;
-		left: 45%;
-		top: 110px;
+		left: 5%;
+		top: 285px;
 		opacity: 0.5;
 	}
 
@@ -128,18 +45,18 @@ title: Instaedit code generator
 	}
 
 	#form {
-		width: 45%;
+		width: 90%;
 
 		position: absolute;
 		left: 10%;
-		top: 190px;
+		top: 40px;
 
 		padding: 20px 20px 20px 20px;
 		font-family: "Helvetica";
 	}
 
 	#code {
-		width: 40%;
+		width: 80%;
 		padding: 5px 25px 20px 15px;
 		
 		word-wrap: break-word;
@@ -149,10 +66,16 @@ title: Instaedit code generator
 		border-bottom-left-radius: 10px;
 
 		position: absolute;
-		left: 45%;
-		top: 100px;
+		left: 4%;
+		top: 290px;
+
+		min-height: 300px;
 
 		color: white;
+	}
+
+	#scripts input[type=text] {
+		margin-left: 70px;
 	}
 
 	input[type=text] {
@@ -160,6 +83,7 @@ title: Instaedit code generator
 		height: 25px;
 		border-radius: 5px;
 		border: 1px solid grey;
+		margin-left: 10px;
 	}
 
 	#minify {
@@ -194,19 +118,121 @@ title: Instaedit code generator
 	}
 </style>
 
+<script>
+	console.log('alive');
+
+	function minify(code) {
+		console.log('-> Minificating');
+		return code.replace(/(\r\n|\n|\r|\t)/gm, "");code;
+	}
+
+	function hideScriptFields() {
+		var tbl = document.getElementById('scripts');
+		tbl.style.visibility = 'hidden';
+	}
+
+	function showScriptFields() {
+		var tbl = document.getElementById('scripts');
+		tbl.style.visibility = 'visible';
+	}
+
+	function composeCode(workerLocation, parserLocation, sourceLocation) {
+		var code = document.getElementById('code-source');
+		
+		code.style.visibility = 'hidden';
+
+		code = code.innerHTML;
+		code = code.replace('~worker~', workerLocation);
+		code = code.replace('~parser~', parserLocation);
+		code = code.replace('~source~', sourceLocation);
+
+		return code;
+	}
+
+	function copyToClipboard(text) {
+  		var input = document.getElementById('code');
+  		
+  		input.select();
+
+  		document.execCommand('Copy');
+	}
+/*
+	window.onload = function () {
+		code.innerText = composeCode('https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js', './js/parser.js', 'https://raw.github.com/username/repo/branch/path');
+
+		hideScriptFields();
+
+		var ownRadio = document.getElementById('own');
+		var githubRadio = document.getElementById('github');
+		var defaultRadio = document.getElementById('default');
+		var minifyButton = document.getElementById('minify');
+		var clipboardButton = document.getElementById('clipboard');
+
+		ownRadio.onclick = function () {
+			code.innerText = composeCode('path/to/parser.js', 'path/to/worker.js');
+			showScriptFields();
+		}
+
+		defaultRadio.onclick = function () {
+			hideScriptFields();
+
+			var code = document.getElementById('code');
+			code.innerText = composeCode('./js/parser-example.js', '../src/instaedit-worker.js');
+		}
+
+		githubRadio.onclick = function () {
+			hideScriptFields();
+
+			var code = document.getElementById('code');
+			code.innerText = composeCode('https://raw.github.com/binaryage/instaedit/master/demo/js/parser-example.js', 'https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js');
+		}
+
+		minifyButton.onclick = function () {
+			console.log('Minificating');
+			var code = document.getElementById('code');
+			code.innerHTML = minify(code.innerHTML);
+		}
+
+		clipboardButton.onclick = function () {
+			var code = document.getElementById('code').innerHTML;
+			alert(code);
+		}
+	}
+*/
+	addEventListener('keyup', function () {
+		
+	});
+</script>
+
+<script src="https://raw.github.com/binaryage/instaedit/master/libs/ace/ace-uncompressed-noconflict.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	window.onload = function () {
+		code.innerText = composeCode('https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js', './js/parser.js', 'https://raw.github.com/username/repo/branch/path');
+
+		var editor = ace.edit("code");
+	}
+</script>
+
+<script src=""></script>
+
 <div class="bg-shield" id="bg-shield-1"></div>
 
 <div id="form">
 	<form name="generator">
 		<table>
-			<tr> <td> <input type="radio" name="source-type" value="github" id="github"/> </td><td> Instaedit Github </td> <tr>
-			<tr> <td> <input type="radio" name="source-type" value="default" id="default" checked="checked" /> </td><td> Instaedit default </td> <tr>
+			<tr> <td> <input type="radio" name="source-type" value="github" id="github" checked="checked" /> </td><td> Instaedit Github </td> <tr>
+			<tr> <td> <input type="radio" name="source-type" value="default" id="default" /> </td><td> Instaedit default </td> <tr>
 			<tr> <td> <input type="radio" name="source-type" value="own" id="own"/> </td><td> Your own </td> <tr>
 		</table>
 
+		<table id="optionals">
+			<tr> <td> Source location </td> <td> <input type="text" name="source" value="https://raw.github.com/<username>/<repo>/<branch>/<path>"> </td> </tr>
+		</table>
+
 		<table id="scripts">
-			<tr> <td> Parser </td> <td> <input type="text" name="parser" value="./js/parser-example.js"> </td> </tr>
-			<tr> <td> Worker </td> <td> <input type="text" name="worker" value="../src/instaedit-worker.js"> </td> </tr>
+			<tr> <td> Parser </td> <td> <input type="text" name="parser" value="./js/parser"> </td> </tr>
+			<tr> <td> Worker </td> <td> <input type="text" name="worker" value="https://raw.github.com/binaryage/instaedit/master/src/instaedit-worker.js"> </td> </tr>
 		</table>
 
 		<br>
@@ -219,31 +245,25 @@ title: Instaedit code generator
 
 <pre id="code"></pre>
 
-<div id="code-source">var instaeditLoaded = false;
+<div id="code-source">
+	window.onload = function () {
+		document.getElementById('instaedit-edit').onclick = function () {
+			(function () {
+				var th = document.getElementsByTagName('head')[0];
+	
+				var s = document.createElement('script');
+				s.setAttribute('type', 'text/javascript');
+				s.setAttribute('src', '~worker~');
 
-window.onload = function () {
-	var button = document.getElementById('instaedit-edit');
-
-	button.onclick = function () {
-		loadScripts('~parser~');
+				th.appendChild(s);
+			})();
+		}
 	}
-}
 
-function loadScripts(parserScript) {
-	addJavascript('~worker~');
-	addJavascript(parserScript);
-}
+<meta name="instaeditparser" content="~parser~">
+<meta name="instaeditsource" content="~source~">
 
-function addJavascript(name) {
-	var th = document.getElementsByTagName('head')[0];
-	var s = document.createElement('script');
-	s.setAttribute('type', 'text/javascript');
-
-	var id = new Date().getTime();
-	s.setAttribute('src', name + '?id' + id);
-
-	th.appendChild(s);
-}";
+<button id="instaedit-edit">Edit</button>
 </div>
 
 <input type="text" id="helper" style="visibility: hidden;">
