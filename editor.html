@@ -5,9 +5,15 @@
   <meta cache-mode="debug">
   <title>Editor</title>
 
-  <script src="https://raw.github.com/binaryage/instaedit/master/libs/ace/ace-uncompressed-noconflict.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://raw.github.com/binaryage/instaedit/master/src/dependencies.js" type="text/javascript" charset="utf-8"></script>
 
-  <script src="https://raw.github.com/binaryage/instaedit/master/src/instaedit-editor.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript">
+    // Deps.provide('');
+    Deps.provide('https://raw.github.com/binaryage/instaedit/master/libs/ace/ace-uncompressed-noconflict.js');
+    Deps.provide('https://raw.github.com/binaryage/instaedit/master/src/github.js');
+    Deps.provide('https://raw.github.com/binaryage/instaedit/master/src/editors.js');
+    Deps.provide('https://raw.github.com/binaryage/instaedit/master/src/instaedit-editor.js');
+  </script>
 
   <style type="text/css" media="screen">
     body {
@@ -22,14 +28,11 @@
         left: -10px;
 
         height: 695px;
-        width: 1300px;
 
         border-bottom: 1px solid silver;
     }
 
-    #parsereditor {
-        width: 100%;
-        
+    #parsereditor {  
         position: relative;
         top: -20px;
         left: -8px;
